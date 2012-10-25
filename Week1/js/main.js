@@ -119,7 +119,7 @@ var getData = function(browsing){
 				.html('Edit')
 				.data('key', key)
 				.appendTo(editButtonDiv)
-				//.on('click', editTrip)	This function hasn't been added yet
+				//.on('click', editTrip)	This function wasn't working/hasn't been added yet
 			;
 			var removeButton = $('<a></a>')
 				.attr('data-role', 'button')
@@ -157,8 +157,8 @@ var storeData = function(data, key){
 var	removeTrip = function (){
 	var ask = confirm("Are you sure you want to remove this trip?");
 	if (ask) {
-		localStorage.removeItem(this.key);
-		divToRemove = document.getElementById(this.key);
+		console.log(this);
+		localStorage.removeItem($(this).data('key'));
 		window.location.reload();
 	} else {
 		alert("Trip was not removed.");
