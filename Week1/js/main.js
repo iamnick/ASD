@@ -55,20 +55,17 @@ var getData = function(browsing){
 
 	// figure out where these entries are going to be appended (search or browse page)
 	if (browsing) {
-		var appendLocation = document.getElementById('browseTripList');
+		var appendLocation = $('#browseTripList').html("");
 		catFilter = this.id;
 		$('#catLabelBusiness').css('textShadow', 'none');
 		$('#catLabelEducation').css('textShadow', 'none');
 		$('#catLabelFamily').css('textShadow', 'none');
 		$('#catLabelVacation').css('textShadow', 'none');
 		$('#catLabelOther').css('textShadow', 'none');
-		spanToChange = document.getElementById("catLabel" + catFilter);
-		$(spanToChange).css('textShadow', '0 0 3px #F90');
-		document.getElementById('selectMsg').style.display = "none";
-		appendLocation.innerHTML = "";
+		$('#catLabel' + catFilter).css('textShadow', '0 0 3px #F90');
+		$('#selectMsg').css('display', 'none');
 	} else {
-		var appendLocation = document.getElementById('searchTripList');
-		appendLocation.innerHTML = "";
+		var appendLocation = $('#searchTripList').html("");
 	}
 	
 	
@@ -91,56 +88,47 @@ var getData = function(browsing){
 		
 		if (goodToGo) {
 			// creates collapsible for trip data
-			var makeEntry = document.createElement('div');
-			makeEntry.setAttribute("data-role", "collapsible");
-			makeEntry.setAttribute("data-mini", "true");
-			appendLocation.appendChild(makeEntry);
-			var makeH3 = document.createElement('h3');
-			makeH3.innerHTML = obj.dest[1] + " - " + obj.date[1];
-			makeEntry.appendChild(makeH3);
-			makeEntry.setAttribute("id", key);	
+			var makeEntry = $('<div></div>')
+				.attr('data-role', 'collapsible')
+				.attr('data-mini', 'true')
+				.attr('id', key)
+				.appendTo(appendLocation)
+			;
 			
-			/*// Add image based on trip type
-			var newImg = document.createElement('img');
-			newImg.setAttribute("src", "img/" + obj.method[1] + ".png");
-			newImg.setAttribute("class", "methodIcon");
-			makeSubDiv.appendChild(newImg);
-			*/
+			var makeH3 = $('<h3></h3>')
+				.html(obj.dest[1] + " - " + obj.date[1])
+				.appendTo(makeEntry)
+			;
 			
 			// Create List of Trip Details
-			var makeList = document.createElement('ul');
-			makeEntry.appendChild(makeList);
+			var makeList = $('<ul></ul>').appendTo(makeEntry);
 			for (var k in obj) {
-				var makeLi = document.createElement('li');
-				makeList.appendChild(makeLi);
-				var optSubText = obj[k][0]+ " " + obj[k][1];
-				makeLi.innerHTML = optSubText;
+				var makeLi = $('<li></li>')
+					.html(obj[k][0] + " " + obj[k][1])
+					.appendTo(makeList)
+				;
 			}
 			
 			// Create Links to Edit/Delete
-			var buttonHolder = document.createElement('div');
-			buttonHolder.setAttribute("class", "ui-grid-a");
-			var editButtonDiv = document.createElement('div');
-			editButtonDiv.setAttribute("class", "ui-block-a");
-			var editButton = document.createElement('a');
-			editButton.setAttribute("data-role", "button");
-			editButton.setAttribute("href", "#addItem");
-			editButton.innerHTML = "Edit";
-			editButton.key = key;
-			var removeButtonDiv = document.createElement('div');
-			removeButtonDiv.setAttribute("class", "ui-block-b");
-			var removeButton = document.createElement('a');
-			removeButton.setAttribute("data-role", "button");
-			removeButton.setAttribute("href", "#");
-			removeButton.innerHTML = "Remove";
-			removeButton.key = key;
-			makeEntry.appendChild(buttonHolder);
-			buttonHolder.appendChild(editButtonDiv);
-			buttonHolder.appendChild(removeButtonDiv);
-			editButtonDiv.appendChild(editButton);
-			removeButtonDiv.appendChild(removeButton);
-			// editButton.addEventListener("click", editTrip);
-			removeButton.addEventListener("click", removeTrip);
+			var buttonHolder = $('<div></div>').attr('class', 'ui-grid-a').appendTo(makeEntry);
+			var editButtonDiv = $('<div></div>').attr('class', 'ui-block-a').appendTo(buttonHolder);
+			var removeButtonDiv = $('<div></div>').attr('class', 'ui-block-b').appendTo(buttonHolder);
+			var editButton = $('<a></a>')
+				.attr('data-role', 'button')
+				.attr('href', '#addItem')
+				.html('Edit')
+				.data('key', key)
+				.appendTo(editButtonDiv)
+				//.on('click', editTrip)	This function hasn't been added yet
+			;
+			var removeButton = $('<a></a>')
+				.attr('data-role', 'button')
+				.attr('href', '#')
+				.html('Remove')
+				.data('key', key)
+				.appendTo(removeButtonDiv)
+				.on('click', removeTrip)
+			;
 			$(makeEntry).trigger('create');
 		}
 		$(appendLocation).trigger('create');
