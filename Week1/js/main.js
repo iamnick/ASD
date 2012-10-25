@@ -1,11 +1,11 @@
 $('#index').on('pageinit', function(){
 	//code needed for home page goes here
-	clearAllData.addEventListener("click", clearData);
-	Business.addEventListener("click", getData);
-	Education.addEventListener("click", getData);
-	Family.addEventListener("click", getData);
-	Vacation.addEventListener("click", getData);
-	Other.addEventListener("click", getData);
+	$('#clearAllData').on('click', clearData);
+	$('#Business').on('click', getData);
+	$('#Education').on('click', getData);
+	$('#Family').on('click', getData);
+	$('#Vacation').on('click', getData);
+	$('#Other').on('click', getData);
 });	
 		
 $('#addItem').on('pageinit', function(){
@@ -23,14 +23,13 @@ $('#addItem').on('pageinit', function(){
 	//any other code needed for addItem page goes here
 	
 	// loops through form and resets values
-	resetFormButton.addEventListener("click", resetForm);
+	$('#resetFormButton').on('click', resetForm);
 	function resetForm () {
-		var radioButtons = radios.getElementsByTagName("input");
+		var radioButtons = $('#radios input');  
 		for (var i = 0; i < radioButtons.length; i++) {
 			$(radioButtons[i]).removeAttr('selected');
 		}
-		var slider = document.getElementById("numPeople");
-		slider.value = "1";
+		$('#numPeople').value = "1";
 	}
 	
 });
