@@ -157,7 +157,6 @@ var storeData = function(data, key){
 var	removeTrip = function (){
 	var ask = confirm("Are you sure you want to remove this trip?");
 	if (ask) {
-		console.log(this);
 		localStorage.removeItem($(this).data('key'));
 		window.location.reload();
 	} else {
