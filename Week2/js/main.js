@@ -25,11 +25,10 @@ $('#addItem').on('pageinit', function(){
 	// loops through form and resets values
 	$('#resetFormButton').on('click', resetForm);
 	function resetForm () {
-		var radioButtons = $('#radios input');  
-		for (var i = 0; i < radioButtons.length; i++) {
-			$(radioButtons[i]).removeAttr('selected');
-		}
-		$('#numPeople').value = "1";
+		$('form input:radio').each(function(index, value){
+			$(this).removeAttr('checked').checkboxradio('refresh');
+		});
+		$('#numPeople').val('1');
 	}
 	
 });
@@ -119,7 +118,7 @@ var getData = function(browsing){
 				.html('Edit')
 				.data('key', key)
 				.appendTo(editButtonDiv)
-				//.on('click', editTrip)	This function wasn't working/hasn't been added yet
+				.on('click', editTrip)	//This function wasn't working/hasn't been added yet
 			;
 			var removeButton = $('<a></a>')
 				.attr('data-role', 'button')
@@ -135,24 +134,54 @@ var getData = function(browsing){
 	}
 };
 
-var storeData = function(data, key){
+var storeData = function(data){
+	key = $('#addTripButton').data('key');
 	if (!key) {
 		var id = Math.floor(Math.random()*1000000);
 	} else {
 		var id = key;
 	}
 	var trip = {};
-			trip.type = ["Trip Type: ", data[0].value];
-			trip.method = ["Travel Method: ", data[1].value];
-			trip.dest = ["Destination: ", data[2].value];
-			trip.date = ["Date: ", data[3].value];
-			trip.people = ["Number of People: ", data[4].value];
-			trip.notes = ["Notes: ", data[5].value];
+		trip.type = ["Trip Type: ", data[0].value];
+		trip.method = ["Travel Method: ", data[1].value];
+		trip.dest = ["Destination: ", data[2].value];
+		trip.date = ["Date: ", data[3].value];
+		trip.people = ["Number of People: ", data[4].value];
+		trip.notes = ["Notes: ", data[5].value];
 		
 		// Save data into local storage, use Stringify to convert object to string
 		localStorage.setItem(id, JSON.stringify(trip));
+		$('#addTripButton').html('Add Trip').removeData('key');
 		alert("Trip Saved!");
+		
 }; 
+
+var editTrip = function (){
+	var key = $(this).data('key');
+	var stuff = localStorage.getItem(key);
+	var trip = JSON.parse(stuff);
+	
+	// maybe change Add Trip in footer to Update Trip
+	$('#tripType').val(trip.type[1]);
+	$('#dest').val(trip.dest[1]);
+	$('#date').val(trip.date[1]);
+	$('#numPeople').val(trip.people[1]);
+	$('#notes').val(trip.notes[1]);
+	
+	$('form input:radio').each(function(index, value){
+		// check for match to the travel method
+		if ($(this).attr('id') === trip.method[1].toLowerCase()) {
+			$(this).attr('checked', true); //.checkboxradio('refresh');
+		} else {
+			$(this).removeAttr('checked');
+		}
+	});
+	$('#radios').trigger('create');
+	$('#addTripButton').html('Update Trip').data('key', key);
+	console.log(key);
+	console.log($('#addTripButton').data('key'));
+
+};
 
 var	removeTrip = function (){
 	var ask = confirm("Are you sure you want to remove this trip?");
