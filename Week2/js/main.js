@@ -30,10 +30,9 @@ $('#addItem').on('pageinit', function(){
 		});
 		$('#numPeople').val('1');
 	}
-	
 });
 
-$('#search').on('pageinit', function(){
+$('#search').on('pageshow', function(){
 	getData(false);
 });
 
@@ -153,6 +152,8 @@ var storeData = function(data){
 		localStorage.setItem(id, JSON.stringify(trip));
 		$('#addTripButton').html('Add Trip').removeData('key');
 		alert("Trip Saved!");
+		resetForm();
+		$.mobile.changePage('#index');
 		
 }; 
 
@@ -176,11 +177,8 @@ var editTrip = function (){
 			$(this).removeAttr('checked');
 		}
 	});
-	$('#radios').trigger('create');
 	$('#addTripButton').html('Update Trip').data('key', key);
-	console.log(key);
-	console.log($('#addTripButton').data('key'));
-
+	$('#radios').trigger('create');
 };
 
 var	removeTrip = function (){
