@@ -36,13 +36,33 @@ $('#search').on('pageshow', function(){
 	getData(false);
 });
 
+$('#moreInfo').on('pageinit', function(){
+	$('#getJSON').on('click', autoFillData);
+	$('#getXML').on('click', autoFillData);
+	$('#getCSV').on('click', autoFillData);
+});
+
 //The functions below can go inside or outside the pageinit function for the page in which it is needed.
 
 var autoFillData = function (){
-	for(var n in json) {
-		var id = Math.floor(Math.random()*1000000);
-		localStorage.setItem(id, JSON.stringify(json[n]));
-	}	 
+	// gets button name to determine which type of AJAX call to make
+	console.log($(this).attr('id'));
+ 	var type = $(this).attr('id');
+ 	
+ 	if (type === 'getJSON') {
+  		$.ajax({
+			url: 'xhr/data.json',
+			type: 'GET',
+			dataType: 'json',
+			success: function(result){
+				for (var n in result) {
+					var id = Math.floor(Math.random()*1000000);
+					localStorage.setItem(id, JSON.stringify(result[n]));
+				}
+				alert('JSON Data Successfully Loaded');
+			}
+		});
+	}
 };
 
 var getData = function(browsing){
