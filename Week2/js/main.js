@@ -46,7 +46,6 @@ $('#moreInfo').on('pageinit', function(){
 
 var autoFillData = function (){
 	// gets button name to determine which type of AJAX call to make
-	console.log($(this).attr('id'));
  	var type = $(this).attr('id');
  	
  	if (type === 'getJSON') {
@@ -55,17 +54,38 @@ var autoFillData = function (){
 			type: 'GET',
 			dataType: 'json',
 			success: function(result){
+				console.log('JSON loaded');
+				console.log(result);
 				for (var n in result) {
 					var id = Math.floor(Math.random()*1000000);
+					console.log(JSON.stringify(result[n]));
 					localStorage.setItem(id, JSON.stringify(result[n]));
 				}
 				alert('JSON Data Successfully Loaded');
+			}
+		});
+	} else if (type === 'getXML') {
+		$.ajax({
+			url: 'xhr/data.xml',
+			type: 'GET',
+			dataType: 'xml',
+			success: function(result){
+				console.log('XML Loaded');
+				console.log(result);
+				$(result).find('trip').each(function(){
+					var item = $(this);
+					var string = "";
+					console.log(item);
+					console.log(item.find('method').text());
+					console.log(item.find('label').value());
+				});
 			}
 		});
 	}
 };
 
 var getData = function(browsing){
+	var labels = ["Travel Method: ", "Trip Type: ", "Destination: ", "Date: ", "Number of People: ", "Notes: "];
 	if (localStorage.length === 0) {
 		alert("There are no saved trips, so default data was added.");
 		autoFillData();
@@ -120,11 +140,13 @@ var getData = function(browsing){
 			
 			// Create List of Trip Details
 			var makeList = $('<ul></ul>').appendTo(makeEntry);
+			var counter = 0;
 			for (var k in obj) {
 				var makeLi = $('<li></li>')
-					.html(obj[k][0] + " " + obj[k][1])
+					.html(labels[counter] + obj[k][1])
 					.appendTo(makeList)
 				;
+				counter++;
 			}
 			
 			// Create Links to Edit/Delete

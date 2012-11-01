@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<trips>
+	<trip>
+		<method>Car</method>
+		<type>Vacation</type>
+		<dest>Pittsburgh, PA</dest>
+		<date>2012-08-25</date>
+		<people>3</people>
+		<notes>Going to see a Pirates game!</notes>
+	</trip>
+	<trip>
+		<method>Plane</method>
+		<type>Business</type>
+		<dest>Denver, CO</dest>
+		<date>2012-09-15</date>
+		<people>1</people>
+		<notes>3-Day Business Trip</notes>
+	</trip>
+</trips>
