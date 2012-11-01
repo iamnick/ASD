@@ -62,6 +62,10 @@ var autoFillData = function (){
 					localStorage.setItem(id, JSON.stringify(result[n]));
 				}
 				alert('JSON Data Successfully Loaded');
+			},
+			error: function(result){
+				alert('There was an error loading the JSON file.');
+				console.log(result);
 			}
 		});
 	} else if (type === 'getXML') {
@@ -81,12 +85,48 @@ var autoFillData = function (){
 					string += '"date":"' + item.find('date').text() + '",';
 					string += '"people":"' + item.find('people').text() + '",';
 					string += '"notes":"' + item.find('notes').text() + '"}';
-					//console.log(string);
+					console.log(string);
 					
 					var id = Math.floor(Math.random()*1000000);
 					localStorage.setItem(id, string);
 				});
 				alert('XML Data Successfully Loaded');
+			},
+			error: function(result){
+				alert('There was an error loading the XML file.');
+				console.log(result);
+			}
+		});
+	} else if (type === 'getCSV') {
+		$.ajax({
+			url: 'xhr/data.csv',
+			type: 'GET',
+			dataType: 'text',
+			success: function(result){
+				console.log('CSV Loaded');
+				console.log(result);
+				
+				var lines = result.split('\n');
+				var keys = lines[0].split("|");
+				
+				for (var i = 1; i < lines.length; i++) {
+					var row = lines[i]
+					var columns = row.split("|");
+					var string = '{';
+					for (var j = 0; j < columns.length; j++) {
+						string += '"' + keys[j] + '":"' + columns[j] + '",';
+					}
+					string = string.slice(0, -1);
+					string += '}';
+					
+					var id = Math.floor(Math.random()*1000000);
+					localStorage.setItem(id, string);
+				}
+				alert('CSV Data Successfully Loaded');
+			},
+			error: function(result){
+				alert('There was an error loading the CSV file.');
+				console.log(result);
 			}
 		});
 	}
@@ -120,9 +160,7 @@ var getData = function(browsing){
 	for (var i = 0, j = localStorage.length; i < j; i++) {
 		var key = localStorage.key(i);
 		var value = localStorage.getItem(key);
-		console.log(value);
 		var obj = JSON.parse(value);
-		console.log(obj);
 		
 		// check for browsing and filter
 		if (browsing) {
