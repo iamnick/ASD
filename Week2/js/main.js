@@ -75,13 +75,22 @@ var autoFillData = function (){
 				$(result).find('trip').each(function(){
 					var item = $(this);
 					var string = "";
-					console.log(item);
-					console.log(item.find('method').text());
-					console.log(item.find('label').value());
+					string += '{"method":"' + item.find('method').text() + '",';
+					string += '"type":"' + item.find('type').text() + '",';
+					string += '"dest":"' + item.find('dest').text() + '",';
+					string += '"date":"' + item.find('date').text() + '",';
+					string += '"people":"' + item.find('people').text() + '",';
+					string += '"notes":"' + item.find('notes').text() + '"}';
+					//console.log(string);
+					
+					var id = Math.floor(Math.random()*1000000);
+					localStorage.setItem(id, string);
 				});
+				alert('XML Data Successfully Loaded');
 			}
 		});
 	}
+	$.mobile.changePage($('#search'));
 };
 
 var getData = function(browsing){
@@ -111,7 +120,9 @@ var getData = function(browsing){
 	for (var i = 0, j = localStorage.length; i < j; i++) {
 		var key = localStorage.key(i);
 		var value = localStorage.getItem(key);
+		console.log(value);
 		var obj = JSON.parse(value);
+		console.log(obj);
 		
 		// check for browsing and filter
 		if (browsing) {
@@ -134,7 +145,7 @@ var getData = function(browsing){
 			;
 			
 			var makeH3 = $('<h3></h3>')
-				.html(obj.dest[1] + " - " + obj.date[1])
+				.html(obj.dest + " - " + obj.date)
 				.appendTo(makeEntry)
 			;
 			
@@ -143,7 +154,7 @@ var getData = function(browsing){
 			var counter = 0;
 			for (var k in obj) {
 				var makeLi = $('<li></li>')
-					.html(labels[counter] + obj[k][1])
+					.html(labels[counter] + obj[k])
 					.appendTo(makeList)
 				;
 				counter++;
@@ -183,12 +194,12 @@ var storeData = function(data){
 		var id = key;
 	}
 	var trip = {};
-		trip.type = ["Trip Type: ", data[0].value];
-		trip.method = ["Travel Method: ", data[1].value];
-		trip.dest = ["Destination: ", data[2].value];
-		trip.date = ["Date: ", data[3].value];
-		trip.people = ["Number of People: ", data[4].value];
-		trip.notes = ["Notes: ", data[5].value];
+		trip.type = data[0].value;
+		trip.method = data[1].value;
+		trip.dest = data[2].value;
+		trip.date = data[3].value;
+		trip.people = data[4].value;
+		trip.notes = data[5].value;
 		
 		// Save data into local storage, use Stringify to convert object to string
 		localStorage.setItem(id, JSON.stringify(trip));
@@ -205,15 +216,15 @@ var editTrip = function (){
 	var trip = JSON.parse(stuff);
 	
 	// maybe change Add Trip in footer to Update Trip
-	$('#tripType').val(trip.type[1]);
-	$('#dest').val(trip.dest[1]);
-	$('#date').val(trip.date[1]);
-	$('#numPeople').val(trip.people[1]);
-	$('#notes').val(trip.notes[1]);
+	$('#tripType').val(trip.type);
+	$('#dest').val(trip.dest);
+	$('#date').val(trip.date);
+	$('#numPeople').val(trip.people);
+	$('#notes').val(trip.notes);
 	
 	$('form input:radio').each(function(index, value){
 		// check for match to the travel method
-		if ($(this).attr('id') === trip.method[1].toLowerCase()) {
+		if ($(this).attr('id') === trip.method.toLowerCase()) {
 			$(this).attr('checked', true); //.checkboxradio('refresh');
 		} else {
 			$(this).removeAttr('checked');
