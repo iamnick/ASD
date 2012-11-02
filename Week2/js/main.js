@@ -48,27 +48,7 @@ var autoFillData = function (){
 	// gets button name to determine which type of AJAX call to make
  	var type = $(this).attr('id');
  	
- 	if (type === 'getJSON') {
-  		$.ajax({
-			url: 'xhr/data.json',
-			type: 'GET',
-			dataType: 'json',
-			success: function(result){
-				console.log('JSON loaded');
-				console.log(result);
-				for (var n in result) {
-					var id = Math.floor(Math.random()*1000000);
-					console.log(JSON.stringify(result[n]));
-					localStorage.setItem(id, JSON.stringify(result[n]));
-				}
-				alert('JSON Data Successfully Loaded');
-			},
-			error: function(result){
-				alert('There was an error loading the JSON file.');
-				console.log(result);
-			}
-		});
-	} else if (type === 'getXML') {
+ 	if (type === 'getXML') {
 		$.ajax({
 			url: 'xhr/data.xml',
 			type: 'GET',
@@ -129,6 +109,25 @@ var autoFillData = function (){
 				console.log(result);
 			}
 		});
+	} else {		// JSON
+  		$.ajax({
+			url: 'xhr/data.json',
+			type: 'GET',
+			dataType: 'json',
+			success: function(result){
+				console.log('JSON loaded');
+				console.log(result);
+				for (var n in result) {
+					var id = Math.floor(Math.random()*1000000);
+					localStorage.setItem(id, JSON.stringify(result[n]));
+				}
+				alert('JSON Data Successfully Loaded');
+			},
+			error: function(result){
+				alert('There was an error loading the JSON file.');
+				console.log(result);
+			}
+		});
 	}
 	$.mobile.changePage($('#search'));
 };
@@ -136,7 +135,6 @@ var autoFillData = function (){
 var getData = function(browsing){
 	var labels = ["Travel Method: ", "Trip Type: ", "Destination: ", "Date: ", "Number of People: ", "Notes: "];
 	if (localStorage.length === 0) {
-		alert("There are no saved trips, so default data was added.");
 		autoFillData();
 	}
 
