@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<trips>
+	<trip>
+		<method>Car</method>
+		<type>Vacation</type>
+		<dest>Pittsburgh, PA</dest>
+		<date>2012-08-25</date>
+		<people>3</people>
+		<notes>Going to see a Pirates game!</notes>
+	</trip>
+	<trip>
+		<method>Plane</method>
+		<type>Business</type>
+		<dest>Denver, CO</dest>
+		<date>2012-09-15</date>
+		<people>1</people>
+		<notes>3-Day Business Trip</notes>
+	</trip>
+	<trip>
+		<method>Train</method>
+		<type>Education</type>
+		<dest>Hartford, CT</dest>
+		<date>2012-10-13</date>
+		<people>1</people>
+		<notes>Afternoon Class</notes>
+	</trip>
+	<trip>
+		<method>Car</method>
+		<type>Family</type>
+		<dest>Boston, MA</dest>
+		<date>2013-01-13</date>
+		<people>5</people>
+		<notes>Visiting Aunt for her birthday.</notes>
+	</trip>
+	<trip>
+		<method>Train</method>
+		<type>Education</type>
+		<dest>Hartford, CT</dest>
+		<date>2013-01-18</date>
+		<people>1</people>
+		<notes>Afternoon Class</notes>
+	</trip>
+	<trip>
+		<method>Plane</method>
+		<type>Vacation</type>
+		<dest>Orlando, FL</dest>
+		<date>2013-02-13</date>
+		<people>4</people>
+		<notes>Winter break vacation.</notes>
+	</trip>
+	<trip>
+		<method>Car</method>
+		<type>Other</type>
+		<dest>Enfield, CT</dest>
+		<date>2013-02-15</date>
+		<people>1</people>
+		<notes>Vet appointment for my dog @ 10AM</notes>
+	</trip>
+	<trip>
+		<method>Train</method>
+		<type>Education</type>
+		<dest>Hartford, CT</dest>
+		<date>2013-02-28</date>
+		<people>1</people>
+		<notes>Evening Class.</notes>
+	</trip>
+	<trip>
+		<method>Train</method>
+		<type>Vacation</type>
+		<dest>New York City, NY</dest>
+		<date>2013-03-20</date>
+		<people>2</people>
+		<notes>Weekend trip to NYC</notes>
+	</trip>
+	<trip>
+		<method>Car</method>
+		<type>Family</type>
+		<dest>Simsbury, CT</dest>
+		<date>2013-05-06</date>
+		<people>1</people>
+		<notes>Visiting my little brother on his birthday.</notes>
+	</trip>
+	<trip>
+		<method>Plane</method>
+		<type>Vacation</type>
+		<dest>Los Angeles, CA</dest>
+		<date>2013-07-12</date>
+		<people>3</people>
+		<notes>Summer vacation to LA.</notes>
+	</trip>
+	<trip>
+		<method>Car</method>
+		<type>Business</type>
+		<dest>Old Saybrook, CT</dest>
+		<date>2013-07-27</date>
+		<people>1</people>
+		<notes>Luncheon with business partner.</notes>
+	</trip>
+	<trip>
+		<method>Car</method>
+		<type>Education</type>
+		<dest>Newport, RI</dest>
+		<date>2013-08-13</date>
+		<people>1</people>
+		<notes>Seminar at 3PM.</notes>
+	</trip>
+	<trip>
+		<method>Car</method>
+		<type>Vacation</type>
+		<dest>Boston, MA</dest>
+		<date>2013-08-20</date>
+		<people>4</people>
+		<notes>Red Sox Game!</notes>
+	</trip>
+	<trip>
+		<method>Car</method>
+		<type>Family</type>
+		<dest>East Haven, CT</dest>
+		<date>2013-09-13</date>
+		<people>2</people>
+		<notes>Little brother's football game.</notes>
+	</trip>
+	<trip>
+		<method>Plane</method>
+		<type>Family</type>
+		<dest>Pittsburgh, PA</dest>
+		<date>2013-10-20</date>
+		<people>3</people>
+		<notes>Visiting sister at college.</notes>
+	</trip>
+	<trip>
+		<method>Car</method>
+		<type>Family</type>
+		<dest>Glastonbury, CT</dest>
+		<date>2013-11-20</date>
+		<people>1</people>
+		<notes>Visiting grandparents.</notes>
+	</trip>
+	<trip>
+		<method>Plane</method>
+		<type>Vacation</type>
+		<dest>Tampa Bay, FL</dest>
+		<date>2013-12-10</date>
+		<people>5</people>
+		<notes>1 week vacation to escape the cold.</notes>
+	</trip>
+	<trip>
+		<method>Car</method>
+		<type>Family</type>
+		<dest>Simsbury, CT</dest>
+		<date>2013-12-25</date>
+		<people>1</people>
+		<notes>Xmas at my dad's house.</notes>
+	</trip>
+	<trip>
+		<method>Train</method>
+		<type>Vacation</type>
+		<dest>New York City, NY</dest>
+		<date>2013-12-31</date>
+		<people>2</people>
+		<notes>New Year's Eve.</notes>
+	</trip>
+</trips>
