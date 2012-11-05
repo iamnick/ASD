@@ -1,11 +1,5 @@
 $('#index').on('pageinit', function(){
 	//code needed for home page goes here
-	$('#clearAllData').on('click', clearData);
-	$('#Business').on('click', getData);
-	$('#Education').on('click', getData);
-	$('#Family').on('click', getData);
-	$('#Vacation').on('click', getData);
-	$('#Other').on('click', getData);
 });	
 		
 $('#addItem').on('pageinit', function(){
@@ -32,6 +26,14 @@ $('#addItem').on('pageinit', function(){
 	}
 });
 
+$('#browse').on('pageinit', function(){
+	$('#Business').data('cat', 'Business').on('click', getData);
+	$('#Education').data('cat', 'Education').on('click', getData);
+	$('#Family').data('cat', 'Family').on('click', getData);
+	$('#Vacation').data('cat', 'Vacation').on('click', getData);
+	$('#Other').data('cat', 'Other').on('click', getData);
+});
+
 $('#search').on('pageshow', function(){
 	getData(false);
 });
@@ -40,6 +42,7 @@ $('#moreInfo').on('pageinit', function(){
 	$('#getJSON').on('click', autoFillData);
 	$('#getXML').on('click', autoFillData);
 	$('#getCSV').on('click', autoFillData);
+	$('#clearAllData').on('click', clearData);
 });
 
 //The functions below can go inside or outside the pageinit function for the page in which it is needed.
@@ -139,9 +142,11 @@ var getData = function(browsing){
 	}
 
 	// figure out where these entries are going to be appended (search or browse page)
-	if (browsing) {
+	if ($(this).data('cat')) {
+		console.log('browsing');
 		var appendLocation = $('#browseTripList').html("");
-		catFilter = this.id;
+		catFilter = $(this).data('cat');
+		browsing = true;
 		$('#catLabelBusiness').css('textShadow', 'none');
 		$('#catLabelEducation').css('textShadow', 'none');
 		$('#catLabelFamily').css('textShadow', 'none');
@@ -150,7 +155,9 @@ var getData = function(browsing){
 		$('#catLabel' + catFilter).css('textShadow', '0 0 3px #F90');
 		$('#selectMsg').css('display', 'none');
 	} else {
+		console.log('searching');
 		var appendLocation = $('#searchTripList').html("");
+		browsing = false;
 	}
 	
 	
@@ -162,7 +169,7 @@ var getData = function(browsing){
 		
 		// check for browsing and filter
 		if (browsing) {
-			if (obj.type[1] === catFilter) {
+			if (obj.type === catFilter) {
 				goodToGo = true;
 			} else {
 				goodToGo = false;
