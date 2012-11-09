@@ -14,8 +14,6 @@ $('#addItem').on('pageinit', function(){
 		}
 	});
 	
-	//any other code needed for addItem page goes here
-	
 	// loops through form and resets values
 	$('#resetFormButton').on('click', resetForm);
 	function resetForm () {
@@ -39,109 +37,13 @@ $('#search').on('pageshow', function(){
 });
 
 $('#moreInfo').on('pageinit', function(){
-	$('#getJSON').on('click', autoFillData);
-	$('#getXML').on('click', autoFillData);
-	$('#getCSV').on('click', autoFillData);
 	$('#clearAllData').on('click', clearData);
 });
 
 //The functions below can go inside or outside the pageinit function for the page in which it is needed.
 
-var autoFillData = function (){
-	// gets button name to determine which type of AJAX call to make
- 	var type = $(this).attr('id');
- 	
- 	if (type === 'getXML') {
-		$.ajax({
-			url: 'xhr/data.xml',
-			type: 'GET',
-			dataType: 'xml',
-			success: function(result){
-				console.log('XML Loaded');
-				console.log(result);
-				$(result).find('trip').each(function(){
-					var item = $(this);
-					var string = "";
-					string += '{"method":"' + item.find('method').text() + '",';
-					string += '"type":"' + item.find('type').text() + '",';
-					string += '"dest":"' + item.find('dest').text() + '",';
-					string += '"date":"' + item.find('date').text() + '",';
-					string += '"people":"' + item.find('people').text() + '",';
-					string += '"notes":"' + item.find('notes').text() + '"}';
-					console.log(string);
-					
-					var id = Math.floor(Math.random()*1000000);
-					localStorage.setItem(id, string);
-				});
-				alert('XML Data Successfully Loaded');
-			},
-			error: function(result){
-				alert('There was an error loading the XML file.');
-				console.log(result);
-			}
-		});
-	} else if (type === 'getCSV') {
-		$.ajax({
-			url: 'xhr/data.csv',
-			type: 'GET',
-			dataType: 'text',
-			success: function(result){
-				console.log('CSV Loaded');
-				console.log(result);
-				
-				var lines = result.split('\n');
-				var keys = lines[0].split("|");
-				
-				for (var i = 1; i < lines.length; i++) {
-					var row = lines[i]
-					var columns = row.split("|");
-					var string = '{';
-					for (var j = 0; j < columns.length; j++) {
-						string += '"' + keys[j] + '":"' + columns[j] + '",';
-					}
-					string = string.slice(0, -1);
-					string += '}';
-					
-					var id = Math.floor(Math.random()*1000000);
-					localStorage.setItem(id, string);
-				}
-				alert('CSV Data Successfully Loaded');
-			},
-			error: function(result){
-				alert('There was an error loading the CSV file.');
-				console.log(result);
-			}
-		});
-	} else {		// JSON
-  		$.ajax({
-			url: 'xhr/data.json',
-			type: 'GET',
-			dataType: 'json',
-			success: function(result){
-				console.log('JSON loaded');
-				console.log(result);
-				for (var n in result) {
-					var id = Math.floor(Math.random()*1000000);
-					localStorage.setItem(id, JSON.stringify(result[n]));
-				}
-				alert('JSON Data Successfully Loaded');
-			},
-			error: function(result){
-				alert('There was an error loading the JSON file.');
-				console.log(result);
-			}
-		});
-	}
-	$.mobile.changePage($('#search'));
-};
-
 var getData = function(){
 	var labels = ["Travel Method: ", "Trip Type: ", "Destination: ", "Date: ", "Number of People: ", "Notes: "];
-	/*
-	if (localStorage.length === 0) {
-		autoFillData();
-	}
-	*/
 	
 	// figure out where these entries are going to be appended (search or browse page)
 	if ($(this).data('cat')) {
@@ -149,7 +51,6 @@ var getData = function(){
 		var appendLocation = $('#browseTripList').html("");
 		catFilter = $(this).data('cat');
 		var ajaxURL = "_view/" + catFilter.toLowerCase() + "/";
-		browsing = true;
 		$('#catThumbnailGrid span').css('textShadow', 'none');
 		$('#catLabel' + catFilter).css('textShadow', '0 0 3px #F90');
 		$('#selectMsg').css('display', 'none');
@@ -157,7 +58,6 @@ var getData = function(){
 		console.log('searching');
 		var appendLocation = $('#searchTripList').html("");
 		var ajaxURL = "_view/all/";
-		browsing = false;
 	}
 	
 	$.ajax({
@@ -165,8 +65,6 @@ var getData = function(){
 		"dataType": "json",
 		"success": function(data){
 			$.each(data.rows, function(index, trip){
-				//console.log(trip.value.type);
-				//console.log(trip.key);
 				var makeEntry = $('<div>')
 					.attr('data-role', 'collapsible')
 					.attr('data-mini', 'true')
@@ -190,10 +88,10 @@ var getData = function(){
 				}
 				
 				// create edit/delete buttons for each entry
-				var buttonHolder = $('<div></div>').attr('class', 'ui-grid-a').appendTo(makeEntry);
-				var editButtonDiv = $('<div></div>').attr('class', 'ui-block-a').appendTo(buttonHolder);
-				var removeButtonDiv = $('<div></div>').attr('class', 'ui-block-b').appendTo(buttonHolder);
-				var editButton = $('<a></a>')
+				var buttonHolder = $('<div>').attr('class', 'ui-grid-a').appendTo(makeEntry);
+				var editButtonDiv = $('<div>').attr('class', 'ui-block-a').appendTo(buttonHolder);
+				var removeButtonDiv = $('<div>').attr('class', 'ui-block-b').appendTo(buttonHolder);
+				var editButton = $('<a>')
 					.attr('data-role', 'button')
 					.attr('href', '#addItem')
 					.html('Edit')
@@ -201,7 +99,7 @@ var getData = function(){
 					.appendTo(editButtonDiv)
 					.on('click', editTrip)	
 				;
-				var removeButton = $('<a></a>')
+				var removeButton = $('<a>')
 					.attr('data-role', 'button')
 					.attr('href', '#')
 					.html('Remove')
@@ -215,75 +113,6 @@ var getData = function(){
 			$(appendLocation).trigger('create');
 		}
 	});
-	
-	/*
-	// make collapsible mini's for each trip entry
-	for (var i = 0, j = localStorage.length; i < j; i++) {
-		var key = localStorage.key(i);
-		var value = localStorage.getItem(key);
-		var obj = JSON.parse(value);
-		
-		// check for browsing and filter
-		if (browsing) {
-			if (obj.type === catFilter) {
-				goodToGo = true;
-			} else {
-				goodToGo = false;
-			}
-		} else {
-			goodToGo = true;
-		}
-		
-		if (goodToGo) {
-			// creates collapsible for trip data
-			var makeEntry = $('<div></div>')
-				.attr('data-role', 'collapsible')
-				.attr('data-mini', 'true')
-				.attr('id', key)
-				.appendTo(appendLocation)
-			;
-			
-			var makeH3 = $('<h3></h3>')
-				.html(obj.dest + " - " + obj.date)
-				.appendTo(makeEntry)
-			;
-			
-			// Create List of Trip Details
-			var makeList = $('<ul></ul>').appendTo(makeEntry);
-			var counter = 0;
-			for (var k in obj) {
-				var makeLi = $('<li></li>')
-					.html(labels[counter] + obj[k])
-					.appendTo(makeList)
-				;
-				counter++;
-			}
-			
-			// Create Links to Edit/Delete
-			var buttonHolder = $('<div></div>').attr('class', 'ui-grid-a').appendTo(makeEntry);
-			var editButtonDiv = $('<div></div>').attr('class', 'ui-block-a').appendTo(buttonHolder);
-			var removeButtonDiv = $('<div></div>').attr('class', 'ui-block-b').appendTo(buttonHolder);
-			var editButton = $('<a></a>')
-				.attr('data-role', 'button')
-				.attr('href', '#addItem')
-				.html('Edit')
-				.data('key', key)
-				.appendTo(editButtonDiv)
-				.on('click', editTrip)	//This function wasn't working/hasn't been added yet
-			;
-			var removeButton = $('<a></a>')
-				.attr('data-role', 'button')
-				.attr('href', '#')
-				.html('Remove')
-				.data('key', key)
-				.appendTo(removeButtonDiv)
-				.on('click', removeTrip)
-			;
-			$(makeEntry).trigger('create');
-		}
-		$(appendLocation).trigger('create');
-	}
-	*/
 };
 
 var storeData = function(data){
