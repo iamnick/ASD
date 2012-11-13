@@ -58,6 +58,7 @@ var getData = function(){
 		"url": ajaxURL,
 		"dataType": "json",
 		"success": function(data){
+			console.log(data);
 			$.each(data.rows, function(index, trip){
 				var makeEntry = $('<div>')
 					.attr('data-role', 'collapsible')
@@ -89,7 +90,8 @@ var getData = function(){
 					.attr('data-role', 'button')
 					.attr('href', '#addItem')
 					.html('Edit')
-					.data('key', trip.key)
+					.data('key', trip.key[0])
+					.data('rev', trip.key[1])
 					.appendTo(editButtonDiv)
 					.on('click', editTrip)	
 				;
@@ -97,7 +99,8 @@ var getData = function(){
 					.attr('data-role', 'button')
 					.attr('href', '#')
 					.html('Remove')
-					.data('key', trip.key)
+					.data('key', trip.key[0])
+					.data('rev', trip.key[1])
 					.appendTo(removeButtonDiv)
 					.on('click', removeTrip)
 				;
@@ -169,8 +172,17 @@ var editTrip = function (){
 var	removeTrip = function (){
 	var ask = confirm("Are you sure you want to remove this trip?");
 	if (ask) {
-		localStorage.removeItem($(this).data('key'));
-		window.location.reload();
+		//localStorage.removeItem($(this).data('key'));
+		var doc = {
+				'_id': $(this).data('key'),
+				'_rev': $(this).data('rev')
+		};
+		$.couch.db('trip-planner').removeDoc(doc, {
+			success: function(data){
+				alert("Trip Removed!");
+				window.location.reload();
+			}
+		});
 	} else {
 		alert("Trip was not removed.");
 	}		

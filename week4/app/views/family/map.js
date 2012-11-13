@@ -1,6 +1,6 @@
 function (doc){
 	if (doc._id !== '_design/app' && doc.type === 'Family'){
-		emit(doc._id, {
+		emit([doc._id, doc._rev], {
 			"method": doc.method,
 			"type": doc.type,
 			"dest": doc.dest,
