@@ -16,12 +16,6 @@ $('#addItem').on('pageinit', function(){
 	
 	// loops through form and resets values
 	$('#resetFormButton').on('click', resetForm);
-	function resetForm () {
-		$('form input:radio').each(function(index, value){
-			$(this).removeAttr('checked').checkboxradio('refresh');
-		});
-		$('#numPeople').val('1');
-	}
 });
 
 $('#browse').on('pageinit', function(){
@@ -122,6 +116,7 @@ var storeData = function(data){
 	} else {
 		var id = key;
 	}
+	
 	var trip = {};
 		trip.type = data[0].value;
 		trip.method = data[1].value;
@@ -130,13 +125,21 @@ var storeData = function(data){
 		trip.people = data[4].value;
 		trip.notes = data[5].value;
 		
+	$.couch.db('trip-planner').saveDoc(trip, {
+		success: function(data){
+			alert('Trip Saved!');
+			resetForm();
+		}
+	});
+		
+		/*
 		// Save data into local storage, use Stringify to convert object to string
 		localStorage.setItem(id, JSON.stringify(trip));
 		$('#addTripButton').html('Add Trip').removeData('key');
 		alert("Trip Saved!");
 		resetForm();
 		$.mobile.changePage('#index');
-		
+		*/
 }; 
 
 var editTrip = function (){
@@ -182,6 +185,13 @@ var clearData = function(){
 			window.location.reload();
 			return false;
 		}
+};
+
+function resetForm () {
+	$('form input:radio').each(function(index, value){
+		$(this).removeAttr('checked').checkboxradio('refresh');
+	});
+	$('#numPeople').val('1');
 };
 
 
