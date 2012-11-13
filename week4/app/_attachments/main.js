@@ -113,25 +113,33 @@ var getData = function(){
 };
 
 var storeData = function(data){
-	key = $('#addTripButton').data('key');
-	if (!key) {
-		var id = Math.floor(Math.random()*1000000);
-	} else {
-		var id = key;
+	var key = $('#addTripButton').data('key');
+	var rev = $('#addTripButton').data('rev');
+	console.log(key);
+	console.log(rev);
+	var trip = {};
+
+	if (rev) {		// updating existing document
+		trip._id = key;
+		trip._rev = rev;
 	}
 	
-	var trip = {};
-		trip.type = data[0].value;
-		trip.method = data[1].value;
-		trip.dest = data[2].value;
-		trip.date = data[3].value;
-		trip.people = data[4].value;
-		trip.notes = data[5].value;
-		
+	// add the rest of the data
+	trip.type = data[0].value;
+	trip.method = data[1].value;
+	trip.dest = data[2].value;
+	trip.date = data[3].value;
+	trip.people = data[4].value;
+	trip.notes = data[5].value;
+	
+	console.log(trip);
+	
 	$.couch.db('trip-planner').saveDoc(trip, {
-		success: function(data){
+		success: function(trip){
 			alert('Trip Saved!');
 			resetForm();
+			$('#addTripButton').html('Add Trip').removeData('key').removeData('rev');
+			$.mobile.changePage('#index');
 		}
 	});
 		
@@ -147,9 +155,33 @@ var storeData = function(data){
 
 var editTrip = function (){
 	var key = $(this).data('key');
-	var stuff = localStorage.getItem(key);
-	var trip = JSON.parse(stuff);
+	var rev = $(this).data('rev');
+	//var stuff = localStorage.getItem(key);
+	//var trip = JSON.parse(stuff);
 	
+	$.couch.db('trip-planner').openDoc(key,{
+		success: function(trip) {
+			$('#tripType').val(trip.type);
+			$('#dest').val(trip.dest);
+			$('#date').val(trip.date);
+			$('#numPeople').val(trip.people);
+			$('#notes').val(trip.notes);
+			$('form input:radio').each(function(index, value){
+				// check for a match to the travel method
+				if ($(this).attr('id') === trip.method.toLowerCase()) {
+					$(this).attr('checked', true);
+					console.log('checked a radio');
+				} else {
+					$(this).removeAttr('checked');
+				}
+			});
+			$('#addTripButton').html('Update Trip').data('key', key).data('rev', rev);
+			console.log($('#addTripButton').data('key'));
+			console.log($('#addTripButton').data('rev'));
+			$('#form input:radio').button('refresh');
+		}
+	});
+	/*
 	// maybe change Add Trip in footer to Update Trip
 	$('#tripType').val(trip.type);
 	$('#dest').val(trip.dest);
@@ -165,8 +197,8 @@ var editTrip = function (){
 			$(this).removeAttr('checked');
 		}
 	});
-	$('#addTripButton').html('Update Trip').data('key', key);
-	$('#radios').trigger('create');
+	*/
+	
 };
 
 var	removeTrip = function (){
