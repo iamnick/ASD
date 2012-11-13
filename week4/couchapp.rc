@@ -1,0 +1,10 @@
+{
+  "env": {
+    "local": {
+      "db": "http://127.0.0.1:5984/trip-planner"
+    },
+  	"cloudant": {
+		"db": "https://ageominerisellyinatensid:4gSAFCgKqywjtruK7UqCY25N@iamnick.cloudant.com/trip-planner"
+  	}
+  }
+}
