@@ -44,20 +44,18 @@ var getData = function(){
 		console.log('browsing');
 		var appendLocation = $('#browseTripList').html("");
 		catFilter = $(this).data('cat');
-		var ajaxURL = "_view/" + catFilter.toLowerCase() + "/";
+		var ajaxURL = 'app/' + catFilter.toLowerCase() + '/';
 		$('#catThumbnailGrid span').css('textShadow', 'none');
 		$('#catLabel' + catFilter).css('textShadow', '0 0 3px #F90');
 		$('#selectMsg').css('display', 'none');
 	} else {
 		console.log('searching');
 		var appendLocation = $('#searchTripList').html("");
-		var ajaxURL = "_view/all/";
+		var ajaxURL = "app/all/";
 	}
 	
-	$.ajax({
-		"url": ajaxURL,
-		"dataType": "json",
-		"success": function(data){
+	$.couch.db('trip-planner').view(ajaxURL, {
+		success: function(data){
 			console.log(data);
 			$.each(data.rows, function(index, trip){
 				var makeEntry = $('<div>')
@@ -138,7 +136,7 @@ var storeData = function(data){
 		success: function(trip){
 			alert('Trip Saved!');
 			resetForm();
-			$('#addTripButton').html('Add Trip').removeData('key').removeData('rev');
+			$('#addTripButton').attr('value', 'Add Trip').removeData('key').removeData('rev');
 			$.mobile.changePage('#index');
 		}
 	});
@@ -170,15 +168,11 @@ var editTrip = function (){
 				// check for a match to the travel method
 				if ($(this).attr('id') === trip.method.toLowerCase()) {
 					$(this).attr('checked', true);
-					console.log('checked a radio');
 				} else {
-					$(this).removeAttr('checked');
+					$(this).attr('checked', false);
 				}
 			});
-			$('#addTripButton').html('Update Trip').data('key', key).data('rev', rev);
-			console.log($('#addTripButton').data('key'));
-			console.log($('#addTripButton').data('rev'));
-			$('#form input:radio').button('refresh');
+			$('#addTripButton').attr('value', 'Update Trip').data('key', key).data('rev', rev);
 		}
 	});
 	/*
