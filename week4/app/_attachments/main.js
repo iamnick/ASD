@@ -147,22 +147,11 @@ var storeData = function(data){
 			$.mobile.changePage('#index');
 		}
 	});
-		
-		/*
-		// Save data into local storage, use Stringify to convert object to string
-		localStorage.setItem(id, JSON.stringify(trip));
-		$('#addTripButton').html('Add Trip').removeData('key');
-		alert("Trip Saved!");
-		resetForm();
-		$.mobile.changePage('#index');
-		*/
 }; 
 
 var editTrip = function (){
 	var key = $(this).data('key');
 	var rev = $(this).data('rev');
-	//var stuff = localStorage.getItem(key);
-	//var trip = JSON.parse(stuff);
 	
 	$.couch.db('trip-planner').openDoc(key,{
 		success: function(trip) {
@@ -182,30 +171,11 @@ var editTrip = function (){
 			$('#addTripButton').attr('value', 'Update Trip').data('key', key).data('rev', rev);
 		}
 	});
-	/*
-	// maybe change Add Trip in footer to Update Trip
-	$('#tripType').val(trip.type);
-	$('#dest').val(trip.dest);
-	$('#date').val(trip.date);
-	$('#numPeople').val(trip.people);
-	$('#notes').val(trip.notes);
-	
-	$('form input:radio').each(function(index, value){
-		// check for match to the travel method
-		if ($(this).attr('id') === trip.method.toLowerCase()) {
-			$(this).attr('checked', true); //.checkboxradio('refresh');
-		} else {
-			$(this).removeAttr('checked');
-		}
-	});
-	*/
-	
 };
 
 var	removeTrip = function (){
 	var ask = confirm("Are you sure you want to remove this trip?");
 	if (ask) {
-		//localStorage.removeItem($(this).data('key'));
 		var doc = {
 				'_id': $(this).data('key'),
 				'_rev': $(this).data('rev')
