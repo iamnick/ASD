@@ -26,6 +26,12 @@ $('#browse').on('pageinit', function(){
 	$('#Other').data('cat', 'Other').on('click', getData);
 });
 
+$('#browse').on('pageshow', function(){
+	$('#catThumbnailGrid span').css('textShadow', 'none');
+	$('#browseTripList').html('');
+	$('#selectMsg').css('display', 'block');
+});
+
 $('#search').on('pageshow', function(){
 	getData();
 });
@@ -42,7 +48,7 @@ var getData = function(){
 	// figure out where these entries are going to be appended (search or browse page)
 	if ($(this).data('cat')) {
 		console.log('browsing');
-		var appendLocation = $('#browseTripList').html("");
+		var appendLocation = $('#browseTripList').html('');
 		catFilter = $(this).data('cat');
 		var ajaxURL = 'app/' + catFilter.toLowerCase() + '/';
 		$('#catThumbnailGrid span').css('textShadow', 'none');
@@ -50,7 +56,7 @@ var getData = function(){
 		$('#selectMsg').css('display', 'none');
 	} else {
 		console.log('searching');
-		var appendLocation = $('#searchTripList').html("");
+		var appendLocation = $('#searchTripList').html('');
 		var ajaxURL = "app/all/";
 	}
 	
@@ -102,7 +108,8 @@ var getData = function(){
 					.appendTo(removeButtonDiv)
 					.on('click', removeTrip)
 				;
-				
+				console.log(trip.key[0]);
+				console.log(trip.key[1]);
 				$(makeEntry).trigger('create');
 			});
 			$(appendLocation).trigger('create');
@@ -206,6 +213,7 @@ var	removeTrip = function (){
 		$.couch.db('trip-planner').removeDoc(doc, {
 			success: function(data){
 				alert("Trip Removed!");
+				console.log('');
 				window.location.reload();
 			}
 		});
